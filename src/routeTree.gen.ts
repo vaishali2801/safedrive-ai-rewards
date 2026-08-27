@@ -11,8 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as LiveMonitoringRouteImport } from './routes/live-monitoring'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as SafetyScoreRouteImport } from './routes/safety-score'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,6 +27,21 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiveMonitoringRoute = LiveMonitoringRouteImport.update({
+  id: '/live-monitoring',
+  path: '/live-monitoring',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -34,39 +54,97 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyScoreRoute = SafetyScoreRouteImport.update({
+  id: '/safety-score',
+  path: '/safety-score',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/history': typeof HistoryRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/live-monitoring': typeof LiveMonitoringRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/rewards': typeof RewardsRoute
+  '/safety-score': typeof SafetyScoreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/history': typeof HistoryRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/live-monitoring': typeof LiveMonitoringRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/rewards': typeof RewardsRoute
+  '/safety-score': typeof SafetyScoreRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/history': typeof HistoryRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/live-monitoring': typeof LiveMonitoringRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/rewards': typeof RewardsRoute
+  '/safety-score': typeof SafetyScoreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/register'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/history'
+    | '/leaderboard'
+    | '/live-monitoring'
+    | '/login'
+    | '/register'
+    | '/rewards'
+    | '/safety-score'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/register'
-  id: '__root__' | '/' | '/dashboard' | '/login' | '/register'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/history'
+    | '/leaderboard'
+    | '/live-monitoring'
+    | '/login'
+    | '/register'
+    | '/rewards'
+    | '/safety-score'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/history'
+    | '/leaderboard'
+    | '/live-monitoring'
+    | '/login'
+    | '/register'
+    | '/rewards'
+    | '/safety-score'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  HistoryRoute: typeof HistoryRoute
+  LeaderboardRoute: typeof LeaderboardRoute
+  LiveMonitoringRoute: typeof LiveMonitoringRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  RewardsRoute: typeof RewardsRoute
+  SafetyScoreRoute: typeof SafetyScoreRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,6 +163,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/live-monitoring': {
+      id: '/live-monitoring'
+      path: '/live-monitoring'
+      fullPath: '/live-monitoring'
+      preLoaderRoute: typeof LiveMonitoringRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -99,14 +198,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety-score': {
+      id: '/safety-score'
+      path: '/safety-score'
+      fullPath: '/safety-score'
+      preLoaderRoute: typeof SafetyScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  HistoryRoute: HistoryRoute,
+  LeaderboardRoute: LeaderboardRoute,
+  LiveMonitoringRoute: LiveMonitoringRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  RewardsRoute: RewardsRoute,
+  SafetyScoreRoute: SafetyScoreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
