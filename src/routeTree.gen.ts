@@ -14,6 +14,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LiveMonitoringRouteImport } from './routes/live-monitoring'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as SafetyScoreRouteImport } from './routes/safety-score'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SafetyScoreRoute = SafetyScoreRouteImport.update({
+  id: '/safety-score',
+  path: '/safety-score',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/live-monitoring': typeof LiveMonitoringRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/safety-score': typeof SafetyScoreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/live-monitoring': typeof LiveMonitoringRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/safety-score': typeof SafetyScoreRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,12 +70,25 @@ export interface FileRoutesById {
   '/live-monitoring': typeof LiveMonitoringRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/safety-score': typeof SafetyScoreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/live-monitoring' | '/login' | '/register'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/live-monitoring'
+    | '/login'
+    | '/register'
+    | '/safety-score'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/live-monitoring' | '/login' | '/register'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/live-monitoring'
+    | '/login'
+    | '/register'
+    | '/safety-score'
   id:
     | '__root__'
     | '/'
@@ -75,6 +96,7 @@ export interface FileRouteTypes {
     | '/live-monitoring'
     | '/login'
     | '/register'
+    | '/safety-score'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,6 +105,7 @@ export interface RootRouteChildren {
   LiveMonitoringRoute: typeof LiveMonitoringRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  SafetyScoreRoute: typeof SafetyScoreRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -122,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/safety-score': {
+      id: '/safety-score'
+      path: '/safety-score'
+      fullPath: '/safety-score'
+      preLoaderRoute: typeof SafetyScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -131,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   LiveMonitoringRoute: LiveMonitoringRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  SafetyScoreRoute: SafetyScoreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
