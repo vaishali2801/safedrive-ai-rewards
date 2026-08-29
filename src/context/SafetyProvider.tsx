@@ -10,6 +10,8 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { SPEED_LIMIT, clampScore, nowTime, type Tone } from "@/lib/safety";
+import { api } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 export type Telemetry = {
   speed: number;
@@ -82,6 +84,7 @@ function load<T>(key: string, fallback: T): T {
 }
 
 export function SafetyProvider({ children }: { children: ReactNode }) {
+  const { user, refreshUser } = useAuth();
   const [telemetry, setT] = useState<Telemetry>(initialTelemetry);
   const [score, setScoreState] = useState(92);
   const [points, setPoints] = useState(2450);
@@ -94,19 +97,32 @@ export function SafetyProvider({ children }: { children: ReactNode }) {
   ]);
   const hydrated = useRef(false);
 
+  // Sync score/points from backend user data
   useEffect(() => {
-    setScoreState(load("sdx_score", 92));
-    setPoints(load("sdx_points", 2450));
-    setRedeemed(load<string[]>("sdx_redeemed", []));
-    hydrated.current = true;
-  }, []);
+    if (user) {
+      setScoreState(clampScore(user.safetyScore ?? 92));
+      setPoints(user.totalPoints ?? 2450);
+    }
+  }, [user]);
 
+  // Fetch alerts from backend
   useEffect(() => {
-    if (!hydrated.current) return;
-    window.localStorage.setItem("sdx_score", JSON.stringify(score));
-    window.localStorage.setItem("sdx_points", JSON.stringify(points));
-    window.localStorage.setItem("sdx_redeemed", JSON.stringify(redeemed));
-  }, [score, points, redeemed]);
+    if (!user) return;
+    api.getAlerts({ limit: 10 }).then((res: any) => {
+      const data = res?.data;
+      if (data?.alerts) {
+        const mapped = data.alerts.map((a: any) => ({
+          id: a._id,
+          time: new Date(a.createdAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }),
+          title: a.type?.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c: string) => c.toUpperCase()) ?? "Alert",
+          detail: a.message ?? "",
+          tone: (a.severity === "CRITICAL" ? "danger" : a.severity === "WARNING" ? "warning" : "safe") as Tone,
+          points: a.metadata?.pointsDeducted ? -a.metadata.pointsDeducted : 0,
+        }));
+        setAlerts(mapped);
+      }
+    }).catch(() => {});
+  }, [user]);
 
   const setTelemetry = useCallback((patch: Partial<Telemetry>) => {
     setT((prev) => ({ ...prev, ...patch }));
@@ -143,6 +159,17 @@ export function SafetyProvider({ children }: { children: ReactNode }) {
 
   const simulate = useCallback(
     (kind: "safe" | "warning" | "violation") => {
+      // Also try to push to backend (fire-and-forget)
+      api.aiDetection("driving-behaviour", {
+        type: kind === "safe" ? "SAFE_BEHAVIOUR" : kind === "warning" ? "SPEED_WARNING" : "PHONE_DETECTED",
+        metadata: { simulated: true },
+      }).catch(() => {});
+
+      // Refresh user data from backend after a short delay
+      setTimeout(() => {
+        refreshUser().catch(() => {});
+      }, 1500);
+
       if (kind === "safe") {
         const e = SAFE_EVENTS[Math.floor(Math.random() * SAFE_EVENTS.length)]!;
         setT((p) => ({ ...p, phone: "SAFE", helmet: "ON", brake: "NORMAL", speed: 45 }));
@@ -173,18 +200,25 @@ export function SafetyProvider({ children }: { children: ReactNode }) {
         window.setTimeout(() => setT((p) => ({ ...p, phone: "SAFE" })), 6000);
       }
     },
-    [addPoints, pushAlert],
+    [addPoints, pushAlert, refreshUser],
   );
 
   const redeem = useCallback(
     (id: string, cost: number, name: string) => {
+      // Call real backend
+      api.redeemReward(id).then(() => {
+        toast.success(`${name} redeemed. -${cost} points`);
+        refreshUser().catch(() => {});
+      }).catch((err) => {
+        toast.error(err.message || "Redemption failed");
+      });
+
       if (points < cost) return false;
       setPoints((p) => p - cost);
       setRedeemed((r) => [...r, id]);
-      toast.success(`${name} redeemed. -${cost} points`);
       return true;
     },
-    [points],
+    [points, refreshUser],
   );
 
   const reset = useCallback(() => {

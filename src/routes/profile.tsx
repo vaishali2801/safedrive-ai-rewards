@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Award, Bike, Gauge, IdCard, Mail, MapPin, Route as RouteIcon, ShieldCheck } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import {
@@ -10,8 +11,10 @@ import {
   StatusBadge,
 } from "@/components/safety/primitives";
 import { useSafety } from "@/context/SafetyProvider";
-import { currentUser, scoreBreakdown } from "@/data/mockData";
+import { useAuth } from "@/context/AuthContext";
+import { currentUser, scoreBreakdown as mockScoreBreakdown } from "@/data/mockData";
 import { scoreLabel } from "@/lib/safety";
+import { api } from "@/lib/api"
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -36,7 +39,47 @@ export const Route = createFileRoute("/profile")({
 
 function ProfilePage() {
   const { score, points } = useSafety();
-  const u = currentUser;
+  const { user } = useAuth();
+  const [realStats, setRealStats] = useState<any>(null);
+  const [scoreBreakdown, setScoreBreakdown] = useState<any>(mockScoreBreakdown);
+
+  useEffect(() => {
+    api.getUserStats().then((res: any) => setRealStats(res.data)).catch(() => {});
+    api.getSafetyBreakdown().then((res: any) => {
+      const bd = res?.data;
+      if (bd && typeof bd === "object") {
+        const mapped = [
+          { label: "Helmet Compliance", value: Math.min(100, 80 + (bd.helmet ?? 0)) },
+          { label: "Speed Compliance", value: Math.min(100, 78 + (bd.speed ?? 0)) },
+          { label: "Braking Behaviour", value: Math.min(100, 75 + (bd.braking ?? 0)) },
+          { label: "Phone-Free Driving", value: Math.min(100, 82 + (bd.phone ?? 0)) },
+          { label: "Smooth Driving", value: Math.min(100, 70 + (bd.smoothDriving ?? 0)) },
+        ];
+        setScoreBreakdown(mapped);
+      }
+    }).catch(() => {});
+  }, []);
+
+  const u = user
+    ? {
+        name: user.name?.split(" ")[0] ?? "Driver",
+        fullName: user.name ?? "Driver",
+        level: "Safe Driver",
+        email: user.email ?? "",
+        vehicle: user.vehicleId?.vehicleNumber ?? "--",
+        vehicleType: user.vehicleId?.vehicleType ?? "--",
+        license: user.licenseNumber ?? "--",
+        city: "--",
+        stats: {
+          totalTrips: realStats?.totalTrips ?? user.totalTrips ?? 0,
+          safeTrips: realStats?.safeTrips ?? user.safeTrips ?? 0,
+          distance: realStats?.totalDistance ? Math.round(realStats.totalDistance / 1000) : Math.round((user.totalDistance ?? 0) / 1000),
+          points: user.totalPoints ?? 0,
+          safetyScore: user.safetyScore ?? 85,
+        },
+        achievements: user.achievements?.map((a: any) => ({ name: a.name, desc: a.description ?? "" })) ?? [],
+      }
+    : currentUser;
 
   const details = [
     { icon: Mail, label: "Email", value: u.email },
@@ -106,7 +149,7 @@ function ProfilePage() {
 
             <Panel title="Score Breakdown">
               <div className="space-y-3">
-                {scoreBreakdown.map((s) => (
+                {scoreBreakdown.map((s: { label: string; value: number }) => (
                   <ProgressBar
                     key={s.label}
                     label={s.label}

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -28,8 +29,11 @@ import {
   StatusBadge,
 } from "@/components/safety/primitives";
 import { useSafety } from "@/context/SafetyProvider";
+import { useAuth } from "@/context/AuthContext";
 import { scoreLabel, toneClasses } from "@/lib/safety";
-import { tripSummary, weeklyScores, currentUser } from "@/data/mockData";
+import { api } from "@/lib/api";
+
+const defaultTripSummary = { safeTrips: 0, distance: 0, violations: 0 };
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -45,14 +49,29 @@ export const Route = createFileRoute("/dashboard")({
 
 function DashboardPage() {
   const { score, points, telemetry, alerts, simulate } = useSafety();
+  const { user } = useAuth();
   const overspeed = telemetry.speed > telemetry.speedLimit;
+
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [drivingStats, setDrivingStats] = useState<any>(null);
+
+  useEffect(() => {
+    api.getDashboard().then((res: any) => {
+      setDashboardData(res.data);
+    }).catch(() => {});
+    api.getDrivingStats().then((res: any) => {
+      setDrivingStats(res.data);
+    }).catch(() => {});
+  }, []);
+
+  const weeklyScoreData = dashboardData?.weeklyScore?.sessions ?? [];
 
   return (
     <AppShell>
       <div className="space-y-6">
         <PageHeader
           eyebrow="Command Centre"
-          title={`Good drive, ${currentUser.name}`}
+          title={`Good drive, ${user?.name ?? "Driver"}`}
           description="Live AI safety monitoring across all connected sensors."
           action={<LiveDot label="Monitoring Active" />}
         />
@@ -70,15 +89,15 @@ function DashboardPage() {
               <SafetyRing score={score} label={scoreLabel(score)} />
               <div className="grid w-full grid-cols-3 gap-2 text-center">
                 <div className="rounded-xl border border-border/60 bg-surface/60 p-3">
-                  <p className="text-metric text-lg text-safe">{tripSummary.safeTrips}</p>
+                  <p className="text-metric text-lg text-safe">{drivingStats?.safeTrips ?? user?.safeTrips ?? 0}</p>
                   <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Safe trips</p>
                 </div>
                 <div className="rounded-xl border border-border/60 bg-surface/60 p-3">
-                  <p className="text-metric text-lg text-info">{tripSummary.distance}</p>
+                  <p className="text-metric text-lg text-info">{drivingStats?.totalDistance ? (drivingStats.totalDistance / 1000).toFixed(1) : ((user?.totalDistance ?? 0) / 1000).toFixed(1)}</p>
                   <p className="text-[10px] uppercase tracking-widest text-muted-foreground">km driven</p>
                 </div>
                 <div className="rounded-xl border border-border/60 bg-surface/60 p-3">
-                  <p className="text-metric text-lg text-danger">{tripSummary.violations}</p>
+                  <p className="text-metric text-lg text-danger">{drivingStats?.violations ?? 0}</p>
                   <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Violations</p>
                 </div>
               </div>
@@ -112,11 +131,9 @@ function DashboardPage() {
                 <ShieldAlert className="mx-auto mb-2 h-5 w-5" />
                 Violation
               </button>
-            </div>
-
-            <div className="mt-5 h-56">
+            </div>              <div className="mt-5 h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={weeklyScores} margin={{ left: -22, right: 6, top: 8 }}>
+                <AreaChart data={weeklyScoreData.length ? weeklyScoreData : [{ day: "Mon", score: 85 }, { day: "Tue", score: 88 }, { day: "Wed", score: 91 }, { day: "Thu", score: 86 }, { day: "Fri", score: 92 }, { day: "Sat", score: 94 }, { day: "Sun", score: 92 }]} margin={{ left: -22, right: 6, top: 8 }}>
                   <defs>
                     <linearGradient id="sc" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="var(--safe)" stopOpacity={0.5} />

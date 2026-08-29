@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CalendarDays, ChevronDown, MapPin, Route as RouteIcon, Timer } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { MetricCard, PageHeader, Panel, StatusBadge } from "@/components/safety/primitives";
 import { scoreTone, toneClasses } from "@/lib/safety";
-import { trips, tripSummary } from "@/data/mockData";
+import { trips as mockTrips, tripSummary as mockTripSummary } from "@/data/mockData";
+import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/history")({
@@ -28,13 +29,44 @@ const filters = ["All", "Safe", "Violations"] as const;
 function HistoryPage() {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
   const [openId, setOpenId] = useState<string | null>("t1");
+  const [realTrips, setRealTrips] = useState<any[]>([]);
+  const [realStats, setRealStats] = useState<any>(null);
+
+  useEffect(() => {
+    api.getDrivingHistory({ limit: 20 }).then((res: any) => {
+      const sessions = res?.data?.sessions ?? res?.data ?? [];
+      if (sessions.length > 0) {
+        const mapped = sessions.map((s: any, i: number) => ({
+          id: s._id || `t${i}`,
+          date: new Date(s.startTime).toLocaleDateString("en-IN", { day: "numeric", month: "short" }),
+          route: s.startLocation?.address ? `${s.startLocation.address} → ${s.endLocation?.address ?? "Destination"}` : `Trip ${i + 1}`,
+          distance: s.distance ?? 0,
+          maxSpeed: s.maxSpeed ?? 0,
+          violations: s.violations?.length ?? 0,
+          score: s.safetyScore ?? 85,
+          points: s.pointsEarned ?? 0,
+          duration: s.endTime ? `${Math.round((new Date(s.endTime).getTime() - new Date(s.startTime).getTime()) / 60000)} min` : "In progress",
+          events: [],
+        }));
+        setRealTrips(mapped);
+      }
+    }).catch(() => {});
+    api.getDrivingStats().then((res: any) => {
+      setRealStats(res.data);
+    }).catch(() => {});
+  }, []);
+
+  const trips = realTrips.length > 0 ? realTrips : mockTrips;
+  const tripSummary = realStats
+    ? { trips: realStats.totalSessions ?? 0, safeTrips: realStats.safeTrips ?? 0, violations: realStats.violations ?? 0, distance: realStats.totalDistance ? Math.round(realStats.totalDistance / 1000) : 0 }
+    : mockTripSummary;
 
   const list = useMemo(
     () =>
       trips.filter((t) =>
         filter === "All" ? true : filter === "Safe" ? t.violations === 0 : t.violations > 0,
       ),
-    [filter],
+    [filter, trips],
   );
 
   return (
@@ -118,7 +150,7 @@ function HistoryPage() {
                             </span>
                           </div>
                           <ol className="relative space-y-3 border-l border-border pl-4">
-                            {t.events.map((e, i) => {
+                            {t.events.map((e: { time: string; label: string; type: "safe" | "warning" | "danger" }, i: number) => {
                               const ec = toneClasses[e.type];
                               return (
                                 <li key={i} className="relative">

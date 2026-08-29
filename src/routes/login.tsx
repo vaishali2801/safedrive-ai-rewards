@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Logo } from "@/components/layout/Logo";
 import { StatusBadge } from "@/components/safety/primitives";
+import { useAuth } from "@/context/AuthContext";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -19,8 +20,10 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("vaishali@safedrivex.io");
-  const [password, setPassword] = useState("demo1234");
+  const { login } = useAuth();
+  const [email, setEmail] = useState("demo@safedrivex.com");
+  const [password, setPassword] = useState("Demo@123");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <div className="grid-lines flex min-h-screen items-center justify-center px-4 py-12">
@@ -40,10 +43,20 @@ function LoginPage() {
 
         <form
           className="mt-6 space-y-4"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            toast.success("Signed in — welcome back!");
-            navigate({ to: "/dashboard" });
+            setIsSubmitting(true);
+            try {
+              const result = await login(email, password);
+              if (result.success) {
+                toast.success("Signed in — welcome back!");
+                navigate({ to: "/dashboard" });
+              } else {
+                toast.error(result.error || "Login failed");
+              }
+            } finally {
+              setIsSubmitting(false);
+            }
           }}
         >
           <label className="block">
@@ -72,9 +85,10 @@ function LoginPage() {
           </label>
           <button
             type="submit"
-            className="w-full rounded-xl bg-safe py-3 text-sm font-bold text-safe-foreground transition-transform hover:scale-[1.02]"
+            disabled={isSubmitting}
+            className="w-full rounded-xl bg-safe py-3 text-sm font-bold text-safe-foreground transition-transform hover:scale-[1.02] disabled:opacity-60"
           >
-            Login to Dashboard
+            {isSubmitting ? "Signing in..." : "Login to Dashboard"}
           </button>
         </form>
 
@@ -85,7 +99,7 @@ function LoginPage() {
           </Link>
         </p>
         <p className="mt-2 text-center text-xs text-muted-foreground/70">
-          Prototype only — any credentials work.
+          Demo: demo@safedrivex.com / Demo@123
         </p>
       </motion.div>
     </div>

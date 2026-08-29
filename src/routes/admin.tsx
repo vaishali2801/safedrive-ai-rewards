@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -18,16 +18,17 @@ import { AlertTriangle, Gauge, ShieldCheck, TriangleAlert, Users } from "lucide-
 import { AppShell } from "@/components/layout/AppShell";
 import { MetricCard, PageHeader, Panel, StatusBadge } from "@/components/safety/primitives";
 import {
-  adminMetrics,
-  adminUsers,
-  adminViolations,
+  adminMetrics as mockAdminMetrics,
+  adminUsers as mockAdminUsers,
+  adminViolations as mockAdminViolations,
   dailySafeTrips,
   redemptionData,
   scoreDistribution,
   violationTypes,
 } from "@/data/mockData";
+import { api } from "@/lib/api";
 import type { Tone } from "@/lib/safety";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -64,6 +65,48 @@ const metricIcons = [Users, ShieldCheck, Gauge, TriangleAlert, AlertTriangle];
 
 function AdminPage() {
   const [tab, setTab] = useState<"violations" | "users">("violations");
+  const [adminData, setAdminData] = useState<any>(null);
+  const [realUsers, setRealUsers] = useState<any[]>([]);
+  const [realViolations, setRealViolations] = useState<any[]>([]);
+
+  useEffect(() => {
+    api.getAdminDashboard().then((res: any) => setAdminData(res.data)).catch(() => {});
+    api.getAdminUsers({ limit: 20 }).then((res: any) => {
+      const users = res?.data?.users ?? [];
+      if (users.length > 0) {
+        setRealUsers(users.map((u: any) => ({
+          name: u.name,
+          vehicle: u.vehicleId?.vehicleNumber ?? "--",
+          score: u.safetyScore ?? 0,
+          trips: u.totalTrips ?? 0,
+          status: u.isActive ? "Active" : "Suspended",
+        })));
+      }
+    }).catch(() => {});
+    api.getAdminViolations({ limit: 20 }).then((res: any) => {
+      const v = res?.data?.violations ?? [];
+      if (v.length > 0) {
+        setRealViolations(v.map((vi: any) => ({
+          driver: vi.userId?.name ?? "Unknown",
+          violation: vi.type?.replace(/_/g, " ") ?? "Violation",
+          location: vi.location?.address ?? "--",
+          time: new Date(vi.createdAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }),
+          severity: vi.severity ?? "MEDIUM",
+          points: -(vi.pointsDeducted ?? 0),
+        })));
+      }
+    }).catch(() => {});
+  }, []);
+
+  const metrics = adminData ? [
+    { label: "Total Drivers", value: adminData.totalUsers ?? 0, tone: "info" },
+    { label: "Active Drivers", value: adminData.activeUsers ?? 0, tone: "safe" },
+    { label: "Safe Trips", value: adminData.safeTrips ?? 0, tone: "safe" },
+    { label: "Violations", value: adminData.totalViolations ?? 0, tone: "danger" },
+    { label: "Avg Safety Score", value: adminData.averageSafetyScore ?? 85, tone: "warning" },
+  ] : mockAdminMetrics;
+  const users = realUsers.length > 0 ? realUsers : mockAdminUsers;
+  const violations = realViolations.length > 0 ? realViolations : mockAdminViolations;
 
   return (
     <AppShell>
@@ -76,7 +119,7 @@ function AdminPage() {
         />
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-          {adminMetrics.map((m, i) => {
+          {metrics.map((m: any, i: number) => {
             const Icon = metricIcons[i] ?? Users;
             return (
               <MetricCard
@@ -234,7 +277,7 @@ function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {adminViolations.map((v, i) => (
+                  {violations.map((v: any, i: number) => (
                     <tr key={`${v.driver}-${i}`} className="border-t border-border/60">
                       <td className="py-3 font-medium">{v.driver}</td>
                       <td className="py-3 text-muted-foreground">{v.violation}</td>
@@ -264,7 +307,7 @@ function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {adminUsers.map((u) => (
+                  {users.map((u: any) => (
                     <tr key={u.vehicle} className="border-t border-border/60">
                       <td className="py-3 font-medium">{u.name}</td>
                       <td className="py-3 tabular-nums text-muted-foreground">{u.vehicle}</td>

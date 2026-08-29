@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Coffee, Fuel, Gift, ShieldCheck, ShoppingBag, Wrench } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { MetricCard, PageHeader, Panel, ProgressBar, StatusBadge } from "@/components/safety/primitives";
 import { useSafety } from "@/context/SafetyProvider";
-import { PENALTY_POINTS, REWARD_POINTS, rewards } from "@/data/mockData";
-import { cn } from "@/lib/utils";
+import { PENALTY_POINTS, REWARD_POINTS, rewards as mockRewards } from "@/data/mockData";
+import { api } from "@/lib/api";
+import { cn } from "@/lib/utils"
 
 export const Route = createFileRoute("/rewards")({
   head: () => ({
@@ -30,9 +32,39 @@ const icons: Record<string, typeof Gift> = {
   shield: ShieldCheck,
 };
 
+const CATEGORY_ICONS: Record<string, typeof Gift> = {
+  FOOD: Coffee, FUEL: Fuel, SHOPPING: ShoppingBag, SERVICE: Wrench, INSURANCE: ShieldCheck, OTHER: Gift,
+};
+
 function RewardsPage() {
   const { points, redeem, redeemed } = useSafety();
-  const next = rewards.find((r) => r.points > points) ?? rewards[rewards.length - 1]!;
+  const [realRewards, setRealRewards] = useState<any[]>([]);
+  const [redemptionCount, setRedemptionCount] = useState(0);
+
+  useEffect(() => {
+    api.getRewards({ limit: 20 }).then((res: any) => {
+      const list = res?.data?.rewards ?? res?.data ?? [];
+      if (list.length > 0) {
+        setRealRewards(list.map((r: any) => ({
+          id: r._id,
+          name: r.name,
+          points: r.pointsRequired,
+          desc: r.description ?? "",
+          icon: r.category?.toLowerCase() ?? "other",
+          partner: r.category ?? "SAFEdriveX",
+          category: r.category,
+          stock: r.stock,
+        })));
+      }
+    }).catch(() => {});
+    api.getMyRedemptions({ limit: 50 }).then((res: any) => {
+      const list = res?.data?.redemptions ?? res?.data ?? [];
+      setRedemptionCount(Array.isArray(list) ? list.length : 0);
+    }).catch(() => {});
+  }, []);
+
+  const rewards = realRewards.length > 0 ? realRewards : mockRewards;
+  const next = rewards.find((r: any) => r.points > points) ?? rewards[rewards.length - 1]!;
 
   return (
     <AppShell>
@@ -46,7 +78,7 @@ function RewardsPage() {
 
         <div className="grid gap-4 sm:grid-cols-3">
           <MetricCard label="Points Balance" value={points} tone="info" icon={<Gift className="h-4 w-4" />} big />
-          <MetricCard label="Rewards Redeemed" value={redeemed.length} tone="safe" sub="Lifetime redemptions" />
+          <MetricCard label="Rewards Redeemed" value={redemptionCount || redeemed.length} tone="safe" sub="Lifetime redemptions" />
           <MetricCard
             label="Next Unlock"
             value={next.name}

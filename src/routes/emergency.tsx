@@ -8,7 +8,8 @@ import { MetricCard, PageHeader, Panel, StatusBadge } from "@/components/safety/
 import { useSafety } from "@/context/SafetyProvider";
 import { emergencyContacts } from "@/data/mockData";
 import { nowTime } from "@/lib/safety";
-import { cn } from "@/lib/utils";
+import { api } from "@/lib/api";
+import { cn } from "@/lib/utils"
 
 export const Route = createFileRoute("/emergency")({
   head: () => ({
@@ -41,6 +42,14 @@ function EmergencyPage() {
     if (countdown <= 0) {
       setCountdown(null);
       setDispatched((d) => [`SOS broadcast sent at ${nowTime()}`, ...d].slice(0, 6));
+      // Call real SOS API
+      api.triggerSOS({
+        triggerType: "MANUAL_SOS",
+        latitude: 21.7645,
+        longitude: 72.1519,
+        address: "Current Location",
+      }).catch(() => {});
+
       pushAlert({
         title: "SOS broadcast sent",
         detail: "Location shared with police, ambulance and family contacts",

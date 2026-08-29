@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Logo } from "@/components/layout/Logo";
 import { StatusBadge } from "@/components/safety/primitives";
+import { useAuth } from "@/context/AuthContext";
 
 export const Route = createFileRoute("/register")({
   head: () => ({
@@ -17,18 +18,23 @@ export const Route = createFileRoute("/register")({
   component: RegisterPage,
 });
 
-const fields = [
-  { key: "name", label: "Full Name", placeholder: "Vaishali Chauhan", type: "text" },
-  { key: "email", label: "Email", placeholder: "you@example.com", type: "email" },
-  { key: "phone", label: "Mobile Number", placeholder: "+91 98XXX XXXXX", type: "tel" },
-  { key: "vehicle", label: "Vehicle Number", placeholder: "GJ-04-XX-7788", type: "text" },
-  { key: "license", label: "Driving Licence", placeholder: "GJ04 2019 0071234", type: "text" },
-  { key: "password", label: "Password", placeholder: "••••••••", type: "password" },
-] as const;
-
 function RegisterPage() {
   const navigate = useNavigate();
-  const [vehicleType, setVehicleType] = useState("Motorcycle");
+  const { register } = useAuth();
+  const [vehicleType, setVehicleType] = useState("MOTORCYCLE");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    vehicle: "",
+    license: "",
+    password: "",
+  });
+
+  const handleChange = (key: string, value: string) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
   return (
     <div className="grid-lines flex min-h-screen items-center justify-center px-4 py-12">
@@ -48,13 +54,38 @@ function RegisterPage() {
 
         <form
           className="mt-6 grid gap-4 sm:grid-cols-2"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            toast.success("Vehicle registered. Welcome to SAFEdriveX!");
-            navigate({ to: "/dashboard" });
+            setIsSubmitting(true);
+            try {
+              const result = await register({
+                name: form.name,
+                email: form.email,
+                mobile: form.mobile,
+                password: form.password,
+                licenseNumber: form.license || "",
+                vehicleNumber: form.vehicle,
+                vehicleType,
+              });
+              if (result.success) {
+                toast.success("Vehicle registered. Welcome to SAFEdriveX!");
+                navigate({ to: "/dashboard" });
+              } else {
+                toast.error(result.error || "Registration failed");
+              }
+            } finally {
+              setIsSubmitting(false);
+            }
           }}
         >
-          {fields.map((f) => (
+          {([
+            { key: "name", label: "Full Name", placeholder: "Vaishali Chauhan", type: "text" },
+            { key: "email", label: "Email", placeholder: "you@example.com", type: "email" },
+            { key: "mobile", label: "Mobile Number", placeholder: "9876543210", type: "tel" },
+            { key: "vehicle", label: "Vehicle Number", placeholder: "GJ04XX7788", type: "text" },
+            { key: "license", label: "Driving Licence", placeholder: "GJ04 2019 0071234", type: "text" },
+            { key: "password", label: "Password", placeholder: "••••••••", type: "password" },
+          ] as const).map((f) => (
             <label key={f.key} className="block">
               <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 {f.label}
@@ -62,8 +93,10 @@ function RegisterPage() {
               <input
                 type={f.type}
                 placeholder={f.placeholder}
+                value={form[f.key]}
+                onChange={(e) => handleChange(f.key, e.target.value)}
                 className="mt-1.5 w-full rounded-xl border border-input bg-surface px-4 py-2.5 text-sm outline-none focus:border-safe/60"
-                required
+                required={f.key !== "license"}
               />
             </label>
           ))}
@@ -72,7 +105,7 @@ function RegisterPage() {
               Vehicle Type
             </span>
             <div className="mt-2 flex flex-wrap gap-2">
-              {["Motorcycle", "Car", "Auto", "Commercial"].map((t) => (
+              {["MOTORCYCLE", "CAR", "COMMERCIAL"].map((t) => (
                 <button
                   key={t}
                   type="button"
@@ -83,16 +116,17 @@ function RegisterPage() {
                       : "border-border text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {t}
+                  {t.charAt(0) + t.slice(1).toLowerCase()}
                 </button>
               ))}
             </div>
           </div>
           <button
             type="submit"
-            className="mt-2 w-full rounded-xl bg-safe py-3 text-sm font-bold text-safe-foreground transition-transform hover:scale-[1.02] sm:col-span-2"
+            disabled={isSubmitting}
+            className="mt-2 w-full rounded-xl bg-safe py-3 text-sm font-bold text-safe-foreground transition-transform hover:scale-[1.02] sm:col-span-2 disabled:opacity-60"
           >
-            Create Account
+            {isSubmitting ? "Creating account..." : "Create Account"}
           </button>
         </form>
 

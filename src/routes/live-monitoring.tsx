@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Activity,
@@ -15,8 +16,9 @@ import { AppShell } from "@/components/layout/AppShell";
 import { LiveDot, PageHeader, Panel, StatusBadge } from "@/components/safety/primitives";
 import { useSafety } from "@/context/SafetyProvider";
 import { toneClasses, type Tone } from "@/lib/safety";
-import { routePath, sensors } from "@/data/mockData";
-import { cn } from "@/lib/utils";
+import { routePath, sensors as mockSensors } from "@/data/mockData";
+import { api } from "@/lib/api";
+import { cn } from "@/lib/utils"
 
 export const Route = createFileRoute("/live-monitoring")({
   head: () => ({
@@ -36,6 +38,21 @@ export const Route = createFileRoute("/live-monitoring")({
 
 function LiveMonitoringPage() {
   const { telemetry, running, setRunning, simulate, alerts } = useSafety();
+  const [realSensors, setRealSensors] = useState<any[]>(mockSensors);
+
+  useEffect(() => {
+    api.getDashboard().then((res: any) => {
+      const data = res?.data;
+      if (data?.sensorStatus) {
+        const mapped = Object.entries(data.sensorStatus).map(([type, info]: [string, any]) => ({
+          key: type.toLowerCase(),
+          name: type.replace(/_/g, " "),
+          detail: info.status ?? "Online",
+        }));
+        if (mapped.length > 0) setRealSensors(mapped);
+      }
+    }).catch(() => {});
+  }, []);
   const overspeed = telemetry.speed > telemetry.speedLimit;
   const speedPct = Math.min(100, (telemetry.speed / 100) * 100);
 
@@ -212,7 +229,7 @@ function LiveMonitoringPage() {
         <div className="grid gap-4 lg:grid-cols-2">
           <Panel title="IoT Sensor Array" subtitle="All hardware nodes reporting">
             <div className="grid gap-2 sm:grid-cols-2">
-              {sensors.map((s) => (
+              {realSensors.map((s: any) => (
                 <div
                   key={s.key}
                   className="flex items-center justify-between rounded-xl border border-border bg-surface-2/50 px-3 py-2.5"

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -18,7 +19,8 @@ import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader, Panel, ProgressBar, SafetyRing, StatusBadge } from "@/components/safety/primitives";
 import { useSafety } from "@/context/SafetyProvider";
 import { scoreLabel, scoreTone } from "@/lib/safety";
-import { PENALTY_POINTS, REWARD_POINTS, monthlyScores, scoreBreakdown, weeklyScores } from "@/data/mockData";
+import { PENALTY_POINTS, REWARD_POINTS, monthlyScores, scoreBreakdown as mockBreakdown, weeklyScores } from "@/data/mockData";
+import { api } from "@/lib/api"
 
 export const Route = createFileRoute("/safety-score")({
   head: () => ({
@@ -48,6 +50,35 @@ const chartTip = {
 function SafetyScorePage() {
   const { score } = useSafety();
   const tone = scoreTone(score);
+  const [realBreakdown, setRealBreakdown] = useState<any[]>(mockBreakdown);
+  const [historyData, setHistoryData] = useState<any[]>([]);
+
+  useEffect(() => {
+    api.getSafetyBreakdown().then((res: any) => {
+      const bd = res?.data;
+      if (bd && typeof bd === "object") {
+        const mapped = [
+          { label: "Helmet Compliance", value: Math.min(100, 80 + (bd.helmet ?? 0)) },
+          { label: "Speed Compliance", value: Math.min(100, 78 + (bd.speed ?? 0)) },
+          { label: "Braking Behaviour", value: Math.min(100, 75 + (bd.braking ?? 0)) },
+          { label: "Phone-Free Driving", value: Math.min(100, 82 + (bd.phone ?? 0)) },
+          { label: "Smooth Driving", value: Math.min(100, 70 + (bd.smoothDriving ?? 0)) },
+        ];
+        setRealBreakdown(mapped);
+      }
+    }).catch(() => {});
+    api.getSafetyHistory({ limit: 30 }).then((res: any) => {
+      const hist = res?.data;
+      if (Array.isArray(hist) && hist.length > 0) {
+        setHistoryData(hist.map((h: any) => ({
+          day: new Date(h.createdAt).toLocaleDateString("en-IN", { day: "numeric" }),
+          score: h.score ?? 85,
+        })));
+      }
+    }).catch(() => {});
+  }, []);
+
+  const breakdown = realBreakdown;
 
   return (
     <AppShell>
@@ -80,7 +111,7 @@ function SafetyScorePage() {
 
           <Panel title="Score Breakdown" subtitle="Weighted contribution of each AI module">
             <div className="space-y-4">
-              {scoreBreakdown.map((s, i) => (
+              {breakdown.map((s: any, i: number) => (
                 <ProgressBar
                   key={s.label}
                   label={s.label}
@@ -92,7 +123,7 @@ function SafetyScorePage() {
             </div>
             <div className="mt-5 h-[200px]">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={scoreBreakdown} outerRadius="78%">
+                <RadarChart data={breakdown} outerRadius="78%">
                   <PolarGrid stroke="var(--border)" />
                   <PolarAngleAxis dataKey="label" tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} />
                   <Radar dataKey="value" stroke="var(--safe)" fill="var(--safe)" fillOpacity={0.25} />
@@ -121,7 +152,7 @@ function SafetyScorePage() {
           <Panel title="30-Day History" subtitle="Rolling daily safety score">
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyScores}>
+                <LineChart data={historyData.length > 0 ? historyData : monthlyScores}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                   <XAxis dataKey="day" tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} interval={4} />
                   <YAxis domain={[60, 100]} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />

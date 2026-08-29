@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Crown, Medal, Trophy } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { PageHeader, Panel, StatusBadge } from "@/components/safety/primitives";
-import { leaderboard } from "@/data/mockData";
-import { cn } from "@/lib/utils";
+import { leaderboard as mockLeaderboard } from "@/data/mockData";
+import { api } from "@/lib/api";
+import { cn } from "@/lib/utils"
 
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({
@@ -22,7 +23,8 @@ export const Route = createFileRoute("/leaderboard")({
   component: LeaderboardPage,
 });
 
-const scopes = ["College", "City", "State"] as const;
+const scopes = ["weekly", "monthly", "all-time"] as const;
+const scopeLabels: Record<string, string> = { weekly: "Weekly", monthly: "Monthly", "all-time": "All Time" };
 const podiumStyle = [
   { ring: "border-warning/50 bg-warning/10 text-warning", icon: Crown, h: "h-28" },
   { ring: "border-info/40 bg-info/10 text-info", icon: Trophy, h: "h-20" },
@@ -30,9 +32,27 @@ const podiumStyle = [
 ];
 
 function LeaderboardPage() {
-  const [scope, setScope] = useState<(typeof scopes)[number]>("College");
-  const rows = leaderboard[scope];
-  const podium = [rows[1], rows[0], rows[2]];
+  const [scope, setScope] = useState<(typeof scopes)[number]>("weekly");
+  const [realRows, setRealRows] = useState<any[]>([]);
+
+  useEffect(() => {
+    api.getLeaderboard({ period: scope, limit: 50 }).then((res: any) => {
+      const data = res?.data;
+      const lb = data?.leaderboard ?? data ?? [];
+      if (Array.isArray(lb)) {
+        setRealRows(lb.map((r: any) => ({
+          rank: r.rank,
+          name: r.user?.name ?? r.name ?? "Driver",
+          points: r.points ?? r.totalPoints ?? 0,
+          score: r.safetyScore ?? 85,
+          trips: r.safeTrips ?? r.trips ?? 0,
+        })));
+      }
+    }).catch(() => {});
+  }, [scope]);
+
+  const rows = realRows.length > 0 ? realRows : (mockLeaderboard as any)["College"] ?? [];
+  const podium = rows.length >= 3 ? [rows[1], rows[0], rows[2]] : [];
 
   return (
     <AppShell>
@@ -52,7 +72,7 @@ function LeaderboardPage() {
                     scope === s ? "bg-safe/15 text-safe" : "text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  {s}
+                  {scopeLabels[s]}
                 </button>
               ))}
             </div>
@@ -105,7 +125,7 @@ function LeaderboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map((r) => {
+                {rows.map((r: { rank: number; name: string; points: number; score: number; trips: number }) => {
                   const me = r.name === "Vaishali";
                   return (
                     <tr
