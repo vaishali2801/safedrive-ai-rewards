@@ -1,2042 +1,288 @@
-# SafeDrive AI
+🚗 SafeDriveX – AI-Powered Road Safety & Rewards Platform
 
-Build a premium, modern, highly interactive React.js web application prototype called:
+SafeDriveX is an innovative road safety solution designed to encourage and reward responsible driving. The project combines AI-based driving behavior analysis, a web application, and a rewards system to promote safer driving habits.
 
-SAFEdriveX
+The main idea behind SafeDriveX is simple:
 
-AI-Powered Road Safety & Reward System
+Drive Safely → Improve Your Score → Earn Rewards
 
-This is a Future 6.0 hackathon prototype focused on ROAD SAFETY.
+SafeDriveX was developed as a prototype solution for the Road Safety vertical.
 
-IMPORTANT:
+📖 About the Project
 
-This is a FRONTEND-ONLY prototype for a hackathon/judging demonstration.
+Road accidents are often caused by unsafe driving behaviors such as distracted driving, speeding, and other risky actions.
 
-Do NOT build the backend yet.
+SafeDriveX aims to create a positive approach toward road safety by encouraging users to improve their driving behavior through an intelligent monitoring and reward-based system.
 
-Do NOT require real IoT hardware.
+The application can analyze driving-related behavior using an AI model and provide users with insights, safety scores, and rewards based on their driving performance.
 
-Do NOT require real AI models.
+🎯 Problem Statement
 
-Do NOT require real GPS hardware.
+Unsafe driving behavior continues to be a major road safety concern.
 
-Use realistic mock data and simulated real-time sensor data.
+Traditional awareness campaigns often focus on penalties and warnings. However, SafeDriveX introduces a different approach:
 
-The frontend must look like a real production-ready smart road safety platform, not like a basic student dashboard.
+Instead of only penalizing unsafe driving, reward safe driving.
 
-==================================================
+The platform motivates users to develop better driving habits by tracking performance and providing incentives for responsible behavior.
 
-PROJECT GOAL
+💡 Solution
 
-==================================================
+SafeDriveX combines:
 
-The platform encourages safe driving using:
+🤖 AI-based driving behavior analysis
+🚗 Safe driving monitoring
+📊 Driving performance scoring
+🏆 Reward-based motivation
+📈 User performance insights
+🌐 Interactive web application
 
-- AI-based unsafe driving detection
+The system is designed to make road safety more engaging and motivating.
 
-- Real-time safety alerts
+✨ Features
+🤖 AI-powered behavior analysis
+🚗 Safe driving monitoring
+📊 Driving safety score
+⚠️ Identification of unsafe driving behavior
+🏆 Reward-based system
+🎁 Incentives for responsible driving
+📈 Driving performance tracking
+👤 User dashboard
+📱 Responsive web interface
+🎨 Modern and interactive UI
 
-- Helmet compliance
-
-- Seat-belt compliance
-
-- Speed monitoring
-
-- Mobile-phone distraction detection
-
-- Harsh braking detection
-
-- Rash driving detection
-
-- Drowsiness detection
-
-- Driving safety score
-
-- Reward points
-
-- Reward redemption
-
-- Driving history
-
-- Leaderboard
-
-- Emergency SOS
-
-- Admin analytics
-
-The concept is:
-
-SAFE DRIVING → HIGHER SCORE → MORE POINTS → REWARDS
-
-UNSAFE DRIVING → ALERT → SCORE/PENALTY → SAFER BEHAVIOUR
-
-The application should communicate this concept immediately to a hackathon judge.
-
-==================================================
-
-TECH STACK
-
-==================================================
-
-Use:
-
-- React.js
-
-- Vite
-
-- Tailwind CSS
-
-- React Router
-
-- Lucide React icons
-
-- Framer Motion for animations
-
-- Recharts for graphs
-
-- Leaflet / React Leaflet for map visualization
-
-- JavaScript
-
-- Local mock JSON/data
-
-- localStorage for temporary frontend persistence
-
-Do NOT use TypeScript unless necessary.
-
-Use reusable React components.
-
-Create a clean component architecture.
-
-==================================================
-
-DESIGN DIRECTION
-
-==================================================
-
-Overall design:
-
-Premium Smart Mobility + AI + IoT dashboard.
-
-Visual inspiration:
-
-- Modern automotive dashboard
-
-- Tesla-style information hierarchy
-
-- Smart-city technology
-
-- AI monitoring dashboard
-
-- Futuristic but professional
-
-- Dark mode as primary UI
-
-- Glassmorphism used carefully
-
-- Neon green for SAFE
-
-- Red for DANGER
-
-- Amber/yellow for WARNING
-
-- Blue/cyan for technology information
-
-Do NOT make it look like a gaming website.
-
-It should look like a serious government/Smart City/AI road safety product.
-
-Use:
-
-Background:
-
-#07111F / #0B1220 style dark navy
-
-Cards:
-
-dark glass panels with subtle borders
-
-SAFE:
-
-green
-
-WARNING:
-
-amber
-
-DANGER:
-
-red
-
-INFO:
-
-blue/cyan
-
-Typography:
-
-Inter or another modern sans-serif.
-
-Use large numbers for important metrics.
-
-Use subtle gradients.
-
-Use soft shadows.
-
-Use glowing status indicators.
-
-==================================================
-
-GLOBAL LAYOUT
-
-==================================================
-
-Create a responsive application shell.
-
-Desktop:
-
---------------------------------------------------
-
-| Logo | Navigation | Notifications | Profile   |
-
---------------------------------------------------
-
-| Sidebar | Main Content                         |
-
-|         |                                      |
-
-|         |                                      |
-
---------------------------------------------------
-
-Sidebar:
-
-1. Dashboard
-
-2. Live Monitoring
-
-3. Safety Score
-
-4. Driving History
-
-5. Rewards
-
-6. Leaderboard
-
-7. Emergency SOS
-
-8. Profile
-
-Bottom:
-
-Settings
-
-Logout
-
-Mobile:
-
-Convert sidebar into a responsive drawer/bottom navigation.
-
-==================================================
-
-BRAND
-
-==================================================
-
-Logo:
-
-Shield + motorcycle/car safety symbol.
-
-Brand:
-
-SafeDriveX
-
-Tagline:
-
-"Ride Smart. Drive Safe."
-
-Alternative tagline:
-
-"Every Safe Drive Counts."
-
-Add small status:
-
-● System Online
-
-==================================================
-
-PAGE 1 — LANDING PAGE
-
-==================================================
-
-Create a highly impressive landing page.
-
-Hero section:
-
-LEFT:
-
-Small badge:
-
-AI + IoT ROAD SAFETY PLATFORM
-
-Heading:
-
-"Make Every Journey
-
-A Safer Journey."
-
-Highlight:
-
-"AI-powered road safety monitoring and rewards."
-
-Description:
-
-"SafeDriveX detects unsafe driving behaviour, provides real-time alerts, tracks driving performance and rewards responsible drivers."
-
-Buttons:
-
-[Explore Dashboard]
-
-[See How It Works]
-
-RIGHT:
-
-Create a futuristic interactive vehicle/rider safety visualization.
-
-Show:
-
-- motorcycle
-
-- smart helmet
-
-- GPS
-
-- AI camera
-
-- safety dashboard
-
-- sensor signals
-
-Can use a high-quality generated/placeholder vehicle image if available.
-
-Overlay floating status cards:
-
-Speed
-
-45 km/h
-
-Helmet
-
-Verified
-
-Phone
-
-Safe
-
-Safety Score
-
-92/100
-
-Hero animation:
-
-slow floating elements and pulsing sensor signals.
-
-==================================================
-
-LANDING PAGE — LIVE SAFETY DEMO
-
-==================================================
-
-Immediately below hero.
-
-Title:
-
-"Real-Time Safety Intelligence"
-
-Create a simulated dashboard.
-
-Cards:
-
-CURRENT SPEED
-
-45 km/h
-
-SPEED LIMIT
-
-60 km/h
-
-HELMET
-
-VERIFIED
-
-PHONE
-
-SAFE
-
-BRAKING
-
-NORMAL
-
-SAFETY SCORE
-
-92/100
-
-Add animated status indicators.
-
-Include a small "LIVE SIMULATION" badge.
-
-==================================================
-
-LANDING PAGE — HOW IT WORKS
-
-==================================================
-
-Create a 4-step process:
-
-01
-
-Sensors Collect Data
-
-02
-
-AI Detects Behaviour
-
-03
-
-Real-Time Alert
-
-04
-
-Score & Rewards
-
-Show connecting animated lines.
-
-==================================================
-
-LANDING PAGE — SAFETY MODULES
-
-==================================================
-
-Create attractive cards for:
-
-Helmet Detection
-
-Seat Belt Detection
-
-Speed Monitoring
-
-Phone Detection
-
-Harsh Braking
-
-Drowsiness Detection
-
-Rash Driving
-
-Wrong-Side Detection
-
-Each card should contain:
-
-Icon
-
-Title
-
-Short description
-
-Status
-
-Example:
-
-Helmet Detection
-
-AI vision checks helmet compliance.
-
-Status:
-
-ACTIVE
-
-==================================================
-
-LANDING PAGE — REWARD SYSTEM
-
-==================================================
-
-Explain:
-
-"Safe behaviour should be rewarded."
-
-Show:
-
-+10 Helmet
-
-+15 Speed Compliance
-
-+20 No Phone
-
-+20 Smooth Driving
-
-+15 Safe Braking
-
-+25 10 KM Safe Drive
-
-+50 Daily Challenge
-
-+100 Weekly Safe Driver
-
-Use attractive point animations.
-
-==================================================
-
-LANDING PAGE — CTA
-
-==================================================
-
-Large final section:
-
-"Your Safety Has a Score.
-
-Make Yours Count."
-
-Buttons:
-
-Start Safe Driving
-
-View Demo
-
-==================================================
-
-PAGE 2 — LOGIN
-
-==================================================
-
-Modern split-screen login.
-
-LEFT:
-
-SafeDriveX branding
-
-Safety quote:
-
-"Every safe decision protects a life."
-
-RIGHT:
-
-Login form
-
-Email
-
-Password
-
-Remember me
-
-Login button
-
-Google login button
-
-"Don't have an account? Register"
-
-Add demo login:
-
-Demo Driver
-
-Demo Admin
-
-==================================================
-
-PAGE 3 — REGISTER
-
-==================================================
-
-Fields:
-
-Full Name
-
-Email
-
-Mobile Number
-
-Vehicle Number
-
-License Number
-
-Password
-
-Confirm Password
-
-Vehicle type:
-
-Motorcycle
-
-Car
-
-Commercial Vehicle
-
-Button:
-
-Create SafeDriveX Account
-
-==================================================
-
-PAGE 4 — DRIVER DASHBOARD
-
-==================================================
-
-This is the MOST IMPORTANT page.
-
-Make this page visually impressive.
-
-Top:
-
-Good Morning, Vaishali
-
-"Ready for a safer journey?"
-
-System status:
-
-● IoT Device Connected
-
-● AI Monitoring Active
-
---------------------------------------------------
-
-TOP METRICS
-
---------------------------------------------------
-
-Current Speed
-
-45 km/h
-
-Speed Limit 60 km/h
-
-Helmet
-
-VERIFIED
-
-Phone
-
-SAFE
-
-Safety Score
-
-92/100
-
-Points
-
-2,450
-
---------------------------------------------------
-
-SAFETY SCORE
-
---------------------------------------------------
-
-Large circular animated score:
-
-92 / 100
-
-Label:
-
-Excellent Driver
-
-Show score breakdown:
-
-Helmet Compliance 100%
-
-Speed Compliance 94%
-
-Braking Behaviour 90%
-
-Phone-Free Driving 100%
-
-Smooth Driving 85%
-
-Use animated progress bars.
-
---------------------------------------------------
-
-LIVE DRIVING STATUS
-
---------------------------------------------------
-
-Create a large live monitoring panel.
-
-Show:
-
-Speed:
-
-45 km/h
-
-Speed Limit:
-
-60 km/h
-
-Helmet:
-
-ON
-
-Phone:
-
-SAFE
-
-Brake:
-
-NORMAL
-
-Drowsiness:
-
-NORMAL
-
-GPS:
-
-CONNECTED
-
-Camera:
-
-ACTIVE
-
-Create small pulsing LIVE indicator.
-
-==================================================
-
-REAL-TIME ALERT PANEL
-
-==================================================
-
-Show recent events.
-
-Example:
-
-10:32 AM
-
-Speed within limit
-
-+15 points
-
-10:28 AM
-
-Helmet verified
-
-+10 points
-
-10:21 AM
-
-Smooth braking detected
-
-+15 points
-
-Use green status.
-
-Also demonstrate warning state:
-
-WARNING
-
-Speed approaching limit
-
-And danger state:
-
-CRITICAL
-
-Mobile phone detected
-
-Allow buttons to simulate:
-
-[Safe Event]
-
-[Warning Event]
-
-[Violation Event]
-
-When clicked, update dashboard visually.
-
-==================================================
-
-DRIVING PERFORMANCE CHART
-
-==================================================
-
-Use Recharts.
-
-Create:
-
-Weekly Safety Score
-
-Monday 82
-
-Tuesday 88
-
-Wednesday 91
-
-Thursday 86
-
-Friday 92
-
-Saturday 94
-
-Sunday 92
-
-Chart:
-
-Line chart
-
-Also show:
-
-Trips
-
-42
-
-Safe Trips
-
-39
-
-Violations
-
-3
-
-Distance
-
-186 km
-
-==================================================
-
-MAP SECTION
-
-==================================================
-
-Use Leaflet.
-
-Show a mock driving route.
-
-Markers:
-
-Start
-
-Current Location
-
-Safety Event
-
-Destination
-
-Display:
-
-Current Location
-
-Bhavnagar, Gujarat
-
-Use mock coordinates.
-
-Do NOT require real GPS.
-
-==================================================
-
-PAGE 5 — LIVE MONITORING
-
-==================================================
-
-Create a dedicated real-time monitoring page.
-
-Header:
-
-LIVE SAFETY MONITORING
-
-Status:
-
-● AI Monitoring Active
-
-Main area:
-
-LEFT:
-
-Large camera preview.
-
-Use a realistic placeholder image/video frame.
-
-Overlay detection boxes.
-
-Example:
-
-PERSON
-
-HELMET ✓
-
-PHONE
-
-NOT DETECTED ✓
-
-RIGHT:
-
-AI Detection Panel
-
-Helmet
-
-SAFE
-
-Phone
-
-SAFE
-
-Drowsiness
-
-SAFE
-
-Seat Belt
-
-SAFE
-
-Driving Style
-
-NORMAL
-
-Bottom:
-
-Sensor status.
-
-GPS
-
-CONNECTED
-
-Accelerometer
-
-ACTIVE
-
-Gyroscope
-
-ACTIVE
-
-Camera
-
-ACTIVE
-
-Buzzer
-
-READY
-
-Create a "Simulate Violation" button.
-
-When clicked:
-
-Phone detected!
-
-Change UI to red.
-
-Show:
-
-PHONE DETECTED
-
-Please focus on driving.
-
-Play visual alarm animation.
-
-==================================================
-
-PAGE 6 — SAFETY SCORE
-
-==================================================
-
-Create a beautiful analytics page.
-
-Large score:
-
-92 / 100
-
-Level:
-
-SAFE DRIVER
-
-Show:
-
-Current Score
-
-92
-
-Weekly Average
-
-89
-
-Monthly Average
-
-87
-
-Best Score
-
-96
-
-Score calculation:
-
-Helmet
-
-+10
-
-Speed Compliance
-
-+15
-
-No Phone
-
-+20
-
-Smooth Driving
-
-+20
-
-Safe Braking
-
-+15
-
-Traffic Compliance
-
-+15
-
-Daily Safe Drive
-
-+25
-
-Use charts.
-
-Show score history.
-
-==================================================
-
-PAGE 7 — DRIVING HISTORY
-
-==================================================
-
-Create table/list of previous trips.
-
-Columns:
-
-Date
-
-Route
-
-Distance
-
-Max Speed
-
-Violations
-
-Safety Score
-
-Points
-
-Example:
-
-10 Aug
-
-Bhavnagar → GEC
-
-12.4 km
-
-54 km/h
-
-0
-
-94
-
-+85
-
-9 Aug
-
-Bhavnagar → Home
-
-8.7 km
-
-62 km/h
-
-1
-
-81
-
-+40
-
-Add filters:
-
-Date
-
-Score
-
-Violations
-
-Route
-
-Clicking a trip opens detailed trip information.
-
-==================================================
-
-PAGE 8 — REWARD STORE
-
-==================================================
-
-This should be visually attractive.
-
-Header:
-
-REWARD STORE
-
-Current Points:
-
-2,450 Points
-
-Progress:
-
-2450 / 5000
-
-"2,550 points to unlock Insurance Discount"
-
-Create reward cards:
-
-500 POINTS
-
-Coffee Coupon
-
-1000 POINTS
-
-Fuel Cashback
-
-2000 POINTS
-
-Shopping Voucher
-
-3000 POINTS
-
-Free Vehicle Service
-
-5000 POINTS
-
-Insurance Discount
-
-Each card:
-
-Icon
-
-Reward name
-
-Points
-
-Description
-
-Button:
-
-Redeem
-
-If insufficient points:
-
-Need 550 more points
-
-Add redemption confirmation modal.
-
-==================================================
-
-PAGE 9 — LEADERBOARD
-
-==================================================
-
-Create gamified but professional leaderboard.
-
-Title:
-
-SAFE DRIVER LEADERBOARD
-
-Tabs:
-
-College
-
-City
-
-State
-
-Top 3:
-
-#1
-
-Aarav
-
-4,820 points
-
-96 safety score
-
-#2
-
-Vaishali
-
-4,620 points
-
-94 safety score
-
-#3
-
-Riya
-
-4,400 points
-
-93 safety score
-
-Use podium cards.
-
-Below:
-
-Rank
-
-Driver
-
-Safety Score
-
-Points
-
-Safe Trips
-
-Highlight current user.
-
-Add:
-
-"This Week's Safest Drivers"
-
-==================================================
-
-PAGE 10 — EMERGENCY SOS
-
-==================================================
-
-Make this page visually serious.
-
-Header:
-
-EMERGENCY SAFETY CENTER
-
-Large SOS button:
-
-SOS
-
-"Press and hold for emergency assistance"
-
-Show:
-
-Emergency Contacts
-
-Police
-
-Ambulance
-
-Family Contact
-
-Mock GPS:
-
-22.3039° N
-
-72.1770° E
-
-Location:
-
-Bhavnagar, Gujarat
-
-Emergency status:
-
-READY
-
-Create crash detection simulation:
-
-"Simulate Emergency"
-
-When activated:
-
-EMERGENCY DETECTED
-
-Location shared with emergency contacts.
-
-Show countdown animation.
-
-IMPORTANT:
-
-This is only a prototype.
-
-Do not actually call emergency services.
-
-==================================================
-
-PAGE 11 — PROFILE
-
-==================================================
-
-Driver profile.
-
-Avatar
-
-Vaishali
-
-Safe Driver Level
-
-Vehicle:
-
-GJ-XX-XXXX
-
-License:
-
-XXXX XXXX XXXX
-
-Statistics:
-
-Total Trips
-
-125
-
-Safe Trips
-
-117
-
-Distance
-
-1,284 km
-
-Points
-
-8,420
-
-Safety Score
-
-92
-
-Achievements:
-
-Helmet Hero
-
-100 Safe KM
-
-Phone-Free Driver
-
-Smooth Braker
-
-Weekly Champion
-
-==================================================
-
-PAGE 12 — ADMIN DASHBOARD
-
-==================================================
-
-Create a separate admin interface.
-
-Admin sidebar:
-
-Overview
-
-Users
-
-Violations
-
-Sensors
-
-Rewards
-
-Reports
-
-Analytics
-
-Top metrics:
-
-Total Drivers
-
-12,840
-
-Active Drivers
-
-8,920
-
-Safe Trips Today
-
-18,420
-
-Violations
-
-1,240
-
-Average Safety Score
-
-87
-
-Create charts:
-
-Daily Safe Trips
-
-Violation Types
-
-Safety Score Distribution
-
-Reward Redemption
-
-==================================================
-
-ADMIN — VIOLATIONS
-
-==================================================
-
-Table:
-
-Driver
-
-Violation
-
-Location
-
-Time
-
-Severity
-
-Points
-
-Examples:
-
-Rahul
-
-Overspeed
-
-Bhavnagar
-
-10:32 AM
-
-HIGH
-
--100
-
-Riya
-
-Mobile Usage
-
-Bhavnagar
-
-10:21 AM
-
-MEDIUM
-
--100
-
-==================================================
-
-ADMIN — SENSOR MONITORING
-
-==================================================
-
-Show IoT sensor cards:
-
-GPS
-
-ONLINE
-
-Camera
-
-ONLINE
-
-Accelerometer
-
-ONLINE
-
-Gyroscope
-
-ONLINE
-
-Helmet Sensor
-
-ONLINE
-
-Alcohol Sensor
-
-ONLINE
-
-Eye Sensor
-
-ONLINE
-
-Use green status indicators.
-
-Allow one sensor to be simulated as:
-
-OFFLINE
-
-Then show warning.
-
-==================================================
-
-ADMIN — ANALYTICS
-
-==================================================
-
-Create professional charts.
-
-Safety Score Trend
-
-Violations by Type
-
-Helmet Compliance
-
-Phone Usage
-
-Speed Violations
-
-Harsh Braking
-
-Drowsiness
-
-Reward Redemptions
-
-Use Recharts.
-
-==================================================
-
-IMPORTANT PROTOTYPE FEATURE
-
-"JUDGE DEMO MODE"
-
-==================================================
-
-Create a special Demo Mode accessible from the dashboard.
-
-Button:
-
-🎬 Start Judge Demo
-
-When clicked, show a guided demonstration.
-
-Scenario:
-
-STEP 1
-
-Driver starts journey.
-
-Status:
-
-Helmet VERIFIED
-
-Speed NORMAL
-
-Phone SAFE
-
-Score:
-
-85
-
-STEP 2
-
-Driver maintains safe speed.
-
-Points:
-
-+15
-
-Score:
-
-88
-
-STEP 3
-
-Driver uses phone.
-
-Trigger:
-
-PHONE DETECTED
-
-Show large red warning.
-
-Score decreases.
-
-Points:
-
--100
-
-STEP 4
-
-Driver stops phone usage.
-
-Status returns SAFE.
-
-STEP 5
-
-Driver completes safe journey.
-
-Reward:
-
-+50 points
-
-Final score:
-
-92/100
-
-Show:
-
-"SAFE JOURNEY COMPLETED"
-
-"85 → 92"
-
-"+95 POINTS EARNED"
-
-This demo should feel smooth and impressive.
-
-Add Next Step button.
-
-==================================================
-
-MOCK REAL-TIME SIMULATION
-
-==================================================
-
-Create a reusable simulation hook.
-
-Every few seconds, randomly update:
-
-speed
-
-helmetStatus
-
-phoneStatus
-
-brakeStatus
-
-drowsiness
-
-gpsStatus
-
-safetyScore
-
-But do NOT make the simulation chaotic.
-
-Use realistic transitions.
-
-Example:
-
-45 → 47 → 49 → 52 km/h
-
-If speed > speedLimit:
-
-status = WARNING
-
-If speed > speedLimit + 10:
-
-status = DANGER
-
-If phoneDetected:
-
-show red alert.
-
-Allow manual simulation buttons.
-
-==================================================
-
-NOTIFICATION SYSTEM
-
-==================================================
-
-Create toast notifications.
-
-Examples:
-
-✓ Helmet detected. +10 points
-
-✓ Safe speed maintained. +15 points
-
-⚠ Speed approaching limit
-
-✕ Phone usage detected. -100 points
-
-✓ Safe journey completed. +50 points
-
-==================================================
-
-SAFETY SCORE LOGIC
-
-==================================================
-
-Frontend demo logic:
-
-Start score:
-
-85
-
-Safe behaviour increases score.
-
-Unsafe behaviour decreases score.
-
-Keep score between:
-
-0 and 100.
-
-Display score using:
-
-Circular progress ring.
-
-Colors:
-
-80-100 = Green
-
-60-79 = Amber
-
-0-59 = Red
-
-==================================================
-
-REWARD LOGIC
-
-==================================================
-
-Points should be stored in frontend state/localStorage.
-
-Reward points:
-
-Wear Helmet +10
-
-Wear Seat Belt +10
-
-Follow Speed Limit +15
-
-No Mobile Usage +20
-
-Smooth Driving +20
-
-Safe Braking +15
-
-Follow Traffic Signals +15
-
-Drive 10 km Safely +25
-
-Daily Challenge +50
-
-Weekly Safe Driver +100
-
-Penalty:
-
-No Helmet -50
-
-No Seat Belt -50
-
-Mobile Usage -100
-
-Over Speed -100
-
-Wrong Side -150
-
-Signal Jump -200
-
-Rash Driving -150
-
-Drink Driving -500
-
-Use these values consistently throughout the application.
-
-==================================================
-
-ANIMATIONS
-
-==================================================
-
-Use Framer Motion.
-
-Animations:
-
-- Page transitions
-
-- Card entrance
-
-- Number counters
-
-- Progress bars
-
-- Score ring animation
-
-- Alert pulse
-
-- Sensor pulse
-
-- Reward points flying into balance
-
-- Modal animations
-
-- Chart animations
-
-- Sidebar transitions
-
-- Button hover effects
-
-Do NOT overuse animations.
-
-The UI should remain professional.
-
-==================================================
-
-RESPONSIVE DESIGN
-
-==================================================
-
-Desktop:
-
-Optimized for 1440px+
-
-Tablet:
-
-Responsive grid
-
-Mobile:
-
-Fully responsive.
-
-Dashboard cards should stack correctly.
-
-Charts should remain readable.
-
-Sidebar becomes drawer.
-
-==================================================
-
-ACCESSIBILITY
-
-==================================================
-
-Use:
-
-- semantic HTML
-
-- proper labels
-
-- keyboard navigation
-
-- sufficient contrast
-
-- aria labels where needed
-
-==================================================
-
-COMPONENT STRUCTURE
-
-==================================================
-
-Create reusable components such as:
-
-Navbar
-
-Sidebar
-
-DashboardCard
-
-MetricCard
-
-SafetyScore
-
-SafetyRing
-
-AlertCard
-
-SensorCard
-
-StatusBadge
-
-SpeedGauge
-
-RewardCard
-
-LeaderboardTable
-
-DrivingChart
-
-SafetyChart
-
-MapPanel
-
-CameraPanel
-
-DetectionOverlay
-
-EmergencyButton
-
-Modal
-
-Toast
-
-ProgressBar
-
-PageHeader
-
-==================================================
-
-DATA STRUCTURE
-
-==================================================
-
-Create mock data files:
-
-users.js
-
-drivingData.js
-
-rewards.js
-
-violations.js
-
-leaderboard.js
-
-sensorData.js
-
-alerts.js
-
-Keep data separate from components.
-
-==================================================
-
-ROUTING
-
-==================================================
-
-Routes:
-
-/
-
- /login
-
- /register
-
- /dashboard
-
- /live-monitoring
-
- /safety-score
-
- /history
-
- /rewards
-
- /leaderboard
-
- /emergency
-
- /profile
-
-Admin:
-
-/admin
-
-/admin/users
-
-/admin/violations
-
-/admin/sensors
-
-/admin/rewards
-
-/admin/analytics
-
-==================================================
-
-IMPORTANT UX REQUIREMENT
-
-==================================================
-
-The judge should understand the product within 10 seconds.
-
-The dashboard must immediately communicate:
-
-1. Current Speed
-
-2. Speed Limit
-
-3. Helmet Status
-
-4. Phone Status
-
-5. Safety Score
-
-6. Points
-
-7. Real-Time Alerts
-
-The UI should visually answer:
-
-"Is the driver safe right now?"
-
-==================================================
-
-IMPORTANT HACKATHON PRESENTATION REQUIREMENT
-
-==================================================
-
-Make the prototype feel like a real working system.
-
-Even though the backend and hardware are not implemented yet, the frontend should demonstrate:
-
-Camera → AI Detection → Alert → Score Change → Points → Reward
-
-Use simulated data to demonstrate this complete pipeline.
-
-Clearly label simulated/demo components internally, but do NOT put "fake" or "fake data" everywhere in the UI.
-
-Use:
-
-LIVE DEMO
-
-SIMULATION
-
-CONNECTED
-
-MONITORING
-
-rather than making the interface look unfinished.
-
-==================================================
-
-FINAL QUALITY REQUIREMENT
-
-==================================================
-
-Do not generate a generic admin dashboard.
-
-Do not use excessive white backgrounds.
-
-Do not make every card identical.
-
-Do not create placeholder lorem ipsum.
-
-Do not leave empty pages.
-
-Every page must have meaningful realistic data.
-
-The final result should look like a startup-quality AI + IoT road safety platform suitable for:
-
-Future 6.0 Hackathon
-
-Smart City Demonstration
-
-Government Road Safety Proposal
-
-College Innovation Competition
-
-The UI must be visually impressive enough that a judge immediately understands:
-
-"AI detects unsafe behaviour → system warns driver → driving score changes → safe behaviour earns points → points become rewards."
-
-Build the complete frontend now.
-
-React + Vite
-
-Tailwind CSS
-
-Framer Motion
-
-Recharts
-
-React Leaflet
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://safedrive-ai-rewards.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/b4f66421-5f33-44d6-b0bd-a7b2134b265b).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+🔄 How SafeDriveX Works
 ```
+
+                    Driver
+                      │
+                      ▼
+              Driving Activity
+                      │
+                      ▼
+                AI Analysis
+                      │
+          ┌───────────┴───────────┐
+          ▼                       ▼
+     Safe Behavior           Unsafe Behavior
+          │                       │
+          ▼                       ▼
+      Higher Score          Lower Safety Score
+          │                       │
+          ▼                       ▼
+       Rewards              Safety Insights
+          │                       │
+          └───────────┬───────────┘
+                      ▼
+                User Dashboard
+```
+🤖 AI-Based Analysis
+
+The SafeDriveX project includes an AI model as part of its solution.
+
+The purpose of the model is to analyze driving-related behavior and help identify whether driving activity follows safer or potentially unsafe patterns.
+
+The AI-based analysis can be used to support:
+
+Detection of driving behavior
+Identification of unsafe patterns
+Driving performance evaluation
+Safety score generation
+Reward eligibility
+🏆 Safe Driving Rewards
+```
+
+SafeDriveX uses a reward-based approach to motivate drivers.
+
+Safe Driving
+     ↓
+Better Performance
+     ↓
+Higher Safety Score
+     ↓
+Reward Points
+     ↓
+Rewards & Recognition
+
+This approach encourages users to consistently improve their driving habits.
+
+📊 Safety Score
+
+A user's driving performance can be represented using a safety score.
+
+The score helps users understand their overall driving behavior and track their improvement.
+
+Driving Performance
+        │
+        ▼
+   AI Analysis
+        │
+        ▼
+   Safety Score
+        │
+        ▼
+ Performance Insights
+        │
+        ▼
+ Rewards Eligibility
+```
+🛠️ Technologies Used
+
+The SafeDriveX project is developed using modern web development technologies and an AI-based solution.
+```
+Frontend
+React.js
+JavaScript
+HTML5
+CSS3
+Responsive Web Design
+Backend
+Node.js
+Express.js
+Database
+Database integration for storing user and application data
+AI / Machine Learning
+AI model for driving behavior analysis
+📂 Project Structure
+safedrive-ai-rewards/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── assets/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   └── package.json
+│
+├── backend/
+│   ├── controllers/
+│   ├── routes/
+│   ├── models/
+│   ├── middleware/
+│   ├── server.js
+│   └── package.json
+│
+├── ai-model/
+│
+└── README.md
+```
+🖥️ Application Modules
+🚗 Driver Module
+
+Allows users to interact with the SafeDriveX platform and view their driving-related performance.
+
+📊 Dashboard
+
+Provides an overview of:
+
+Driving performance
+Safety score
+Rewards
+User progress
+Safety insights
+🤖 AI Analysis
+
+Processes driving-related information and helps evaluate driving behavior.
+
+🏆 Rewards System
+
+Encourages safe driving by providing incentives based on user performance.
+
+🚀 Getting Started
+Prerequisites
+
+Make sure you have the following installed:
+
+Node.js
+npm
+Git
+Clone the Repository
+git clone https://github.com/vaishali2801/safedrive-ai-rewards.git
+
+Navigate to the project:
+
+cd safedrive-ai-rewards
+Install Frontend Dependencies
+cd frontend
+npm install
+npm run dev
+Install Backend Dependencies
+cd backend
+npm install
+npm run dev
+🎯 Project Goal
+
+The goal of SafeDriveX is to make road safety more engaging by combining technology with positive motivation.
+
+Instead of focusing only on:
+
+Unsafe Driving → Penalty
+
+SafeDriveX promotes:
+
+Safe Driving → Recognition → Rewards
+
+This creates a more positive and engaging approach toward responsible driving.
+
+🧠 Key Concepts Used
+
+Through this project, the team explores:
+
+Artificial Intelligence
+Machine Learning
+Web Development
+Frontend Development
+Backend Development
+REST APIs
+Data Analysis
+User Performance Tracking
+Reward-Based Systems
+Road Safety Technology
+🔮 Future Improvements
+📍 Real-time driving tracking
+🤖 Improved AI model accuracy
+📊 Advanced driving analytics
+🏆 More reward options
+🗺️ Route-based safety analysis
+🔔 Real-time safety alerts
+👤 User authentication
+📱 Mobile application
+🌐 Live dashboard updates
+🏅 Leaderboard for safe drivers
+🤝 Integration with insurance or reward partners
+👥 Team
+
+SafeDriveX is developed as a team project for the Road Safety vertical.
+
+The project focuses on combining AI and web technology to create an innovative solution for encouraging safer driving behavior.
+
+🌟 Vision
+
+Making roads safer by turning responsible driving into a rewarding experience.
+
+SafeDriveX aims to encourage people to see road safety not only as a responsibility but also as a positive habit worth maintaining.
+
+🤝 Contributing
+
+Contributions and ideas are welcome!
+
+Fork the repository.
+Create a new branch.
+Make your changes.
+Commit your changes.
+Push the branch.
+Create a Pull Request.
+⭐ Support
+
+If you like the SafeDriveX project and its mission to promote safer roads, consider giving the repository a ⭐.
+
+👩‍💻 Author
+
+Vaishali Chauhan
+
+B.Tech – Information Technology
+Full stack & Web Development Enthusiast
+
+🚗 Drive Smart. Stay Safe. Earn Rewards. 🏆
