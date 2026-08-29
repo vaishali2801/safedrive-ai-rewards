@@ -32,7 +32,7 @@ const icons: Record<string, typeof Gift> = {
 
 function RewardsPage() {
   const { points, redeem, redeemed } = useSafety();
-  const next = rewards.find((r) => r.points > points) ?? rewards[rewards.length - 1];
+  const next = rewards.find((r) => r.points > points) ?? rewards[rewards.length - 1]!;
 
   return (
     <AppShell>
