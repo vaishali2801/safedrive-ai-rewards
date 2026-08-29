@@ -62,7 +62,7 @@ function LeaderboardPage() {
         <Panel title={`${scope} podium`} subtitle="Top three safest drivers">
           <div className="grid grid-cols-3 items-end gap-3">
             {podium.map((p, i) => {
-              const style = podiumStyle[i === 0 ? 1 : i === 1 ? 0 : 2];
+              const style = podiumStyle[i === 0 ? 1 : i === 1 ? 0 : 2]!;
               const Icon = style.icon;
               return (
                 <motion.div

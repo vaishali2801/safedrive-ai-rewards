@@ -144,7 +144,7 @@ export function SafetyProvider({ children }: { children: ReactNode }) {
   const simulate = useCallback(
     (kind: "safe" | "warning" | "violation") => {
       if (kind === "safe") {
-        const e = SAFE_EVENTS[Math.floor(Math.random() * SAFE_EVENTS.length)];
+        const e = SAFE_EVENTS[Math.floor(Math.random() * SAFE_EVENTS.length)]!;
         setT((p) => ({ ...p, phone: "SAFE", helmet: "ON", brake: "NORMAL", speed: 45 }));
         setScoreState((s) => clampScore(s + 2));
         addPoints(e.points);
