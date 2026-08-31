@@ -404,7 +404,7 @@ function SettingsPage() {
             </div>
             <button
               onClick={() => {
-                resetDemo?.();
+                resetDemoData();
                 toast.warning("Demo data reset", { description: "Score and points restored to baseline." });
               }}
               className="inline-flex items-center gap-2 rounded-lg border border-danger/40 bg-danger/10 px-4 py-2 text-sm font-semibold text-danger transition-colors hover:bg-danger/20"
