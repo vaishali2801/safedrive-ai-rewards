@@ -68,10 +68,19 @@ export function AppShell({ children }: { children: ReactNode }) {
           <ShieldCheck className="h-4.5 w-4.5 shrink-0" />
           Admin Console
         </Link>
-        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent">
+        <Link
+          to="/settings"
+          onClick={() => setOpen(false)}
+          className={cn(
+            "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+            pathname === "/settings"
+              ? "bg-safe/12 text-safe shadow-[inset_0_0_0_1px_var(--sidebar-border)]"
+              : "text-sidebar-foreground/70 hover:bg-sidebar-accent",
+          )}
+        >
           <Settings className="h-4.5 w-4.5 shrink-0" />
           Settings
-        </button>
+        </Link>
         <Link
           to="/login"
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-danger/80 transition-colors hover:bg-danger/10"
