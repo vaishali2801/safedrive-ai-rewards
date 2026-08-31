@@ -151,7 +151,7 @@ function SettingRow({
 }
 
 function SettingsPage() {
-  const { resetDemo } = useSafety() as { resetDemo?: () => void };
+  const { reset: resetDemoData } = useSafety();
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
   const [saved, setSaved] = useState(true);
 
